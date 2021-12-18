@@ -33,46 +33,24 @@ class TransactionList extends StatelessWidget {
               //화면에 보일때만 요소 만듬
               itemBuilder: (ctx, index) {
                 return Card(
-                  child: Row(
-                    children: <Widget>[
-                      Container(
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
                         padding: const EdgeInsets.all(10),
-                        margin: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Theme.of(context)
-                                .primaryColor, // const value가 될 수 없음
-                            width: 2,
-                          ),
-                        ),
-                        //////////////////////////// 가격
-                        child: Text(
-                          '\$${_userTransactions[index].amount.toStringAsFixed(2)}', //소수점 둘째자리까지
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20,
-                          ),
-                        ),
+                        child: FittedBox(
+                            child:
+                                Text('\$${_userTransactions[index].amount}')),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          ////////////////////////// 제목
-                          Text(_userTransactions[index].title,
-                              style: Theme.of(context).textTheme.headline6),
-                          /////////////////////////날짜
-                          Text(
-                            DateFormat.yMMMEd()
-                                .format(_userTransactions[index].date),
-                            style: TextStyle(color: Colors.grey),
-                          )
-                        ],
-                      )
-                    ],
+                    ),
+                    title: Text(
+                      _userTransactions[index].title,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    subtitle: Text(DateFormat.yMMMd()
+                        .format(_userTransactions[index].date)),
                   ),
                 );
               },
