@@ -17,10 +17,13 @@ class _NewTransactionState extends State<NewTransaction> {
   DateTime? _selectedDate;
 
   void _submitData() {
+    if (_amountController.text.isEmpty) {
+      return;
+    }
     final enteredTitle = _titleController.text;
     final enteredAmount = double.parse(_amountController.text);
 
-    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
       return;
     }
 
@@ -28,6 +31,7 @@ class _NewTransactionState extends State<NewTransaction> {
       // widget은 상위 클래스의 변수 받아올 수 있게 해줌
       enteredTitle,
       enteredAmount,
+      _selectedDate,
     );
 
     Navigator.of(context).pop(); //가장 위에있는 context 없애줌 -> 이 경우엔 modal
