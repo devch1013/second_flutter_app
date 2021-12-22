@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/transaction.dart';
 import 'package:intl/intl.dart';
+import './transaction_item.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> _userTransactions;
@@ -10,61 +11,36 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: _userTransactions.isEmpty
-          ? LayoutBuilder(builder: (ctx, constraints) {
-              return Column(
-                children: [
-                  Text(
-                    'No transactions added yet',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  // 사이간격
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                      height: constraints.maxHeight * 0.6,
-                      child: Image.asset(
-                        'assets/images/waiting.png',
-                        fit: BoxFit.cover,
-                      ))
-                ],
-              );
-            })
-          : ListView.builder(
-              //화면에 보일때만 요소 만듬
-              itemBuilder: (ctx, index) {
-                return Card(
-                  elevation: 5,
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: FittedBox(
-                            child:
-                                Text('\$${_userTransactions[index].amount}')),
-                      ),
-                    ),
-                    title: Text(
-                      _userTransactions[index].title,
+        child: _userTransactions.isEmpty
+            ? LayoutBuilder(builder: (ctx, constraints) {
+                return Column(
+                  children: [
+                    Text(
+                      'No transactions added yet',
                       style: Theme.of(context).textTheme.headline6,
                     ),
-                    subtitle: Text(DateFormat.yMMMd()
-                        .format(_userTransactions[index].date)),
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Theme.of(context).errorColor, // 기본이 빨간색
-                      ),
-                      onPressed: () => deleteTx((_userTransactions[index].id)),
+                    // 사이간격
+                    SizedBox(
+                      height: 20,
                     ),
-                  ),
+                    Container(
+                        height: constraints.maxHeight * 0.6,
+                        child: Image.asset(
+                          'assets/images/waiting.png',
+                          fit: BoxFit.cover,
+                        ))
+                  ],
                 );
-              },
-              itemCount: _userTransactions.length,
-            ),
-    );
+              })
+            // listview.builder 화면에 보일때만 요소 만듬
+            : ListView(
+                children: _userTransactions
+                    .map((tx) => TransactionItem(
+                          key: ValueKey(tx.id),
+                          transaction: tx,
+                          deleteTx: deleteTx,
+                        ))
+                    .toList(),
+              ));
   }
 }
